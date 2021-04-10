@@ -208,13 +208,13 @@ app.post("/register/:type", async function (req, res) {
                                     from: "recruitment@gmail.com",
                                     to: username,
                                     subject:
-                                        "IETE Recruitments 2020 - Registration Verification",
+                                        "Recruitments 2021 - Registration Verification",
                                     html:
-                                        '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to IETE Recruitments 2020, <b>' +
+                                        '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
                                         first_name +
                                         "</b><br><br><h2>Your Email Verification code is <b>" +
                                         otp +
-                                        "</b></h2><br>Please use this code to verify your account. <br><br>Best Regards,<br>IETE VIT</body>",
+                                        "</b></h2><br>Please use this code to verify your account.</body>",
                                 };
                                 let transporter = nodemailer.createTransport({
                                     host: "smtp.gmail.com",

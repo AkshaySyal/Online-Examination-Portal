@@ -29,9 +29,7 @@
     <!-- Nav Bar -->
     <div class="container-fluid Navbar-Section">
         <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
-            <a href="/" class="navbar-brand">
-                <img src="/images/IETE WHITE.png" width="60" height="60" alt="">
-            </a>
+
             <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -43,52 +41,37 @@
                         <a class="nav-link h-tab" href="/">Home</a>
                     </li>
 
-                    <li class="nav-item divider-vertical">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
+
 
                     <li class="nav-item divider-vertical">
                         <a class="nav-link" href="/recruitments">Recruitments</a>
                     </li>
                     <% if(user){ %>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a style="color: black!important;" class="dropdown-item" href="/logout">Logout</a>
-                        </div>
-                    </li>
-                    <% if(!user.verified){ %>
-                    <li class="nav-item divider-vertical">
-                        <a class="nav-link" style="color: red;" href="/verificationPage">Verify</a>
-                    </li>
-                    <% } %>
-                    <% }else{ %>
-                    <li class="nav-item divider-vertical">
-                        <a class="nav-link" href="/login/user">Login</a>
-                    </li>
-                    <% } %>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a style="color: black!important;" class="dropdown-item" href="/logout">Logout</a>
+                            </div>
+                        </li>
+                        <% if(!user.verified){ %>
+                            <li class="nav-item divider-vertical">
+                                <a class="nav-link" style="color: red;" href="/verificationPage">Verify</a>
+                            </li>
+                            <% } %>
+                                <% }else{ %>
+                                    <li class="nav-item divider-vertical">
+                                        <a class="nav-link" href="/login/user">Login</a>
+                                    </li>
+                                    <% } %>
 
 
 
 
                 </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
 
-
-                        <a class="nav-icons" href="https://www.facebook.com/ieteisf"><img src="/images/facebook.png"
-                                width="40" height="40" alt=""></a> <a class="nav-icons"
-                            href="https://www.instagram.com/iete_vit/"><img src="/images/instagram-sketched.png"
-                                width="40" height="40" alt=""></a><a class="nav-icons"
-                            href="https://www.linkedin.com/company/iete-isf/"><img src="/images/linkedin.png" width="40"
-                                height="40" alt=""></a>
-
-                    </li>
-
-                </ul>
 
             </div>
         </nav>
@@ -97,37 +80,32 @@
     <!--Main Section-->
     <div class="container-fluid Main-Section main-text background-img">
         <% if(passed){ %>
-        <div class="alert alert-info alert-dismissible" role="alert">
-            <strong><%= passed %> </strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <% } %>
-        <div class="heading">
-            <h1>IETE&nbsp;-&nbsp;ISF</h1>
-        </div>
-        <div class="sub-heading">
-            <h4>Institution of Electronics and</br> Telecommunication Engineers</h4>
-        </div>
-        <div class="main-button">
-            <a href="/recruitments">
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <strong>
+                    <%= passed %>
+                </strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <% } %>
+                <div class="heading">
+                    <h1>Welcome</h1>
+                </div>
+                <div class="sub-heading">
+                    <h4>This is the Home Page.</h4>
+                </div>
+                <div class="main-button">
+                    <a href="/recruitments">
 
-                GO TO RECRUITMENTS PORTAL &nbsp;&nbsp; <i class="fas fa-chevron-right"></i>
+                        GO TO RECRUITMENTS PORTAL &nbsp;&nbsp; <i class="fas fa-chevron-right"></i>
 
-            </a>
-        </div>
-        <div class="sub-sub-heading">
-            <h5>Awarded the Best Chapter for the Academic Year 2018-19</h5>
-        </div>
+                    </a>
+                </div>
+
 
     </div>
-    <!--Footer-->
-    <div class="footer">
-        <a href="https://ietevit.com/">
-            <div class="fixed-bottom footer-content">Visit us at <strong>https://ietevit.com/ </strong></div>
-        </a>
-    </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

@@ -71,13 +71,7 @@ nav .navbar-nav li a {
     height: 550px;
 }
 
-.background-img {
-    padding: 4% 8% 3% 8%;
-    background-image: url("/images/IETE\ BLACK\ -\ Copy3.png");
-    background-repeat: no-repeat;
-    background-position: right;
-    background-size: 40%;
-}
+
 
 .heading {
     font-style: normal;

@@ -26,9 +26,7 @@
     <!-- Nav Bar -->
     <div class="container-fluid Navbar-Section">
         <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
-            <a href="/" class="navbar-brand">
-                <img src="/images/IETE WHITE.png" width="60" height="60" alt="">
-            </a>
+
             <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -40,129 +38,114 @@
                         <a class="nav-link" href="/">Home</a>
                     </li>
 
-                    <li class="nav-item divider-vertical">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
+
 
                     <li class="nav-item divider-vertical">
                         <a class="nav-link r-tab" href="/recruitments">Recruitments</a>
                     </li>
 
                 </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-icons" href="https://www.facebook.com/ieteisf"><img src="/images/facebook.png"
-                                width="40" height="40" alt=""></a> <a class="nav-icons"
-                            href="https://www.instagram.com/iete_vit/"><img src="/images/instagram-sketched.png"
-                                width="40" height="40" alt=""></a><a class="nav-icons"
-                            href="https://www.linkedin.com/company/iete-isf/"><img src="/images/linkedin.png" width="40"
-                                height="40" alt=""></a>
-                    </li>
 
-                </ul>
 
             </div>
         </nav>
     </div>
     <% if(passedMessage){ %>
 
-    <div class="alert alert-warning alert-dismissible fade show container" role="alert">
-        <strong>Oops!</strong> <%= passedMessage %>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <% } %>
-    <div class="wrapper" style="background-image: url('images/bg-registration-form-2.jpg');">
-        <div class="inner">
-            <form action="/register/user" method="POST">
-                <h3>Register Now</h3>
-                <div class="form-group">
-                    <div class="form-wrapper" style="margin-right: 10px;">
-                        <label for="">
-                            <input required name="first_name" placeholder=" " type="text" class="form-control">
-                            <span>First Name</span>
-                        </label>
-                    </div>
-                    <div class="form-wrapper">
-                        <label for="">
-                            <input required name="last_name" placeholder=" " type="text" class="form-control">
-                            <span>Last Name</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="form-wrapper">
-
-                    <label for="">
-                        <input required name="username" placeholder=" " type="email" class="form-control">
-                        <span>VIT-Email</span>
-                    </label>
-
-                </div>
-                <br>
-
-                <div class="form-wrapper">
-
-                    <label for="">
-                        <input required name="registration" placeholder=" " type="text" class="form-control">
-                        <span><u></u>Registration No.</span>
-                    </label>
-
-                </div>
-                <br>
-
-
-                <br>
-                <div class="form-wrapper">
-
-                    <label for="">
-                        <input name="contact_number" placeholder=" " type="text" class="form-control">
-                        <span>Phone No.</span>
-                    </label>
-
-                </div>
-                <br>
-                <div class="form-wrapper">
-
-                    <label for="">
-                        <input required name="password" placeholder=" " type="password" class="form-control">
-                        <span>Password</span>
-                    </label>
-
-                </div>
-                <br>
-                <div class="form-wrapper">
-
-                    <label for="">
-                        <input required name="repassword" placeholder=" " type="password" class="form-control">
-                        <span>Retype password</span>
-                    </label>
-
-                </div>
-
-                <button class="button-submit" type="submit">Register</button>
-                <p style="text-align: center;padding-top:40px; font-size:1.2rem">Already a user? <a
-                        href="/login/user">Login</a></p>
-            </form>
+        <div class="alert alert-warning alert-dismissible fade show container" role="alert">
+            <strong>Oops!</strong>
+            <%= passedMessage %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
         </div>
-    </div>
-    <!--Footer-->
-    <div class="footer">
-        <div class="fixed-bottom footer-content">Visit us at <strong><a
-                    href="https://ietevit.com/">https://ietevit.com/</a></strong></div>
-    </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/222c4d2c03.js" crossorigin="anonymous"></script>
+        <% } %>
+            <div class="wrapper" style="background-image: url('images/bg-registration-form-2.jpg');">
+                <div class="inner">
+                    <form action="/register/user" method="POST">
+                        <h3>Register Now</h3>
+                        <div class="form-group">
+                            <div class="form-wrapper" style="margin-right: 10px;">
+                                <label for="">
+                                    <input required name="first_name" placeholder=" " type="text" class="form-control">
+                                    <span>First Name</span>
+                                </label>
+                            </div>
+                            <div class="form-wrapper">
+                                <label for="">
+                                    <input required name="last_name" placeholder=" " type="text" class="form-control">
+                                    <span>Last Name</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-wrapper">
+
+                            <label for="">
+                                <input required name="username" placeholder=" " type="email" class="form-control">
+                                <span>VIT-Email</span>
+                            </label>
+
+                        </div>
+                        <br>
+
+                        <div class="form-wrapper">
+
+                            <label for="">
+                                <input required name="registration" placeholder=" " type="text" class="form-control">
+                                <span><u></u>Registration No.</span>
+                            </label>
+
+                        </div>
+                        <br>
+
+
+                        <br>
+                        <div class="form-wrapper">
+
+                            <label for="">
+                                <input name="contact_number" placeholder=" " type="text" class="form-control">
+                                <span>Phone No.</span>
+                            </label>
+
+                        </div>
+                        <br>
+                        <div class="form-wrapper">
+
+                            <label for="">
+                                <input required name="password" placeholder=" " type="password" class="form-control">
+                                <span>Password</span>
+                            </label>
+
+                        </div>
+                        <br>
+                        <div class="form-wrapper">
+
+                            <label for="">
+                                <input required name="repassword" placeholder=" " type="password" class="form-control">
+                                <span>Retype password</span>
+                            </label>
+
+                        </div>
+
+                        <button class="button-submit" type="submit">Register</button>
+                        <p style="text-align: center;padding-top:40px; font-size:1.2rem">Already a user? <a
+                                href="/login/user">Login</a></p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Optional JavaScript -->
+            <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+            <script src="https://kit.fontawesome.com/222c4d2c03.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
