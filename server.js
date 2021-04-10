@@ -349,7 +349,7 @@ app.get("/instruction/:domain", async function (req, res) {
 app.get("/quizPortal/:domain", async function (req, res) {
     let auth = req.isAuthenticated();
     var startdate = "02/22/2021 19:50:00";
-    var enddate = "02/29/2021 19:53:00";
+    var enddate = "06/29/2021 19:53:00";
     let startTime = new Date(startdate).getTime(); // MADE changes here with time
     let endTime = new Date(enddate).getTime();
     console.log(startTime)
