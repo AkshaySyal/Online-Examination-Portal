@@ -71,7 +71,9 @@ nav .navbar-nav li a {
     height: 550px;
 }
 
-
+.home-img{
+    float: right;
+}
 
 .heading {
     font-style: normal;
