@@ -43,7 +43,7 @@
 
 
                     <li class="nav-item divider-vertical">
-                        <a class="nav-link" href="/recruitments">Recruitments</a>
+                        <a class="nav-link " href="/recruitments">Recruitments</a>
                     </li>
                     <% if(user){ %>
                         <li class="nav-item dropdown">
@@ -57,10 +57,7 @@
                         </li>
                         <% }else{ %>
                             <li class="nav-item divider-vertical">
-                                <a class="nav-link h-tab" href="/login/user">Login</a>
-                            </li>
-                            <li class="nav-item divider-vertical">
-                                <a class="nav-link r-tab" href="/register/user">Register</a>
+                                <a class="nav-link r-tab" href="/login/user">Login</a>
                             </li>
                             <% } %>
 
@@ -73,7 +70,6 @@
     <body>
         <% if(passedMessage){ %>
             <div class="alert alert-warning alert-dismissible fade show container" role="alert">
-                <strong>Oops!</strong>
                 <%= passedMessage %>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -82,25 +78,24 @@
             <% } %>
                 <div class="wrapper" style="background-image: url('images/bg-registration-form-2.jpg');">
                     <div class="inner">
-                        <form action="/login/user" method="POST">
-                            <h3>Welcome Back</h3>
+                        <form method="POST">
+                            <h3>Reset Password</h3>
                             <div class="form-wrapper">
                                 <label for="">
-                                    <input required name="username" placeholder=" " type="email" class="form-control">
-                                    <span><u></u>Email</span>
+                                    <input required name="password" placeholder=" " type="password"
+                                        class="form-control">
+                                    <span>New password</span>
                                 </label>
                             </div>
                             <br>
                             <div class="form-wrapper">
                                 <label for="">
-                                    <input required name="password" placeholder=" " type="password"
+                                    <input required name="confirm" placeholder=" " type="password"
                                         class="form-control">
-                                    <span>Password</span>
+                                    <span>Confirm password</span>
                                 </label>
                             </div>
-                            <button class="button" type="submit">Log In</button>
-                            <p style="text-align: center;padding-top:40px; font-size:1.2rem"> <a
-                                    href="/forgot">Forgot password?</a></p>
+                            <button class="button" type="submit">Update Password</button>
                         </form>
                     </div>
                 </div>

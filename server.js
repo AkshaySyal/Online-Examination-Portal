@@ -6,6 +6,8 @@ const ejs = require("ejs");
 const mongoose = require("mongoose");
 const { DateTime } = require("luxon");
 const nodemailer = require("nodemailer");
+const async = require('async');
+const crypto = require('crypto');
 const Utils = require("./models/utils");
 require('dotenv').config();
 //auth
@@ -90,7 +92,10 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     type: String,
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
+
 userSchema.plugin(passportLocalMongoose);
 const User = new mongoose.model("User", userSchema);
 passport.use(User.createStrategy());
@@ -114,6 +119,9 @@ app.get("/recruitments", function (req, res) {
 });
 app.get("/thanks", function (req, res) {
     res.render("thanks", { user: req.user });
+});
+app.get("/sorry", function (req, res) {
+    res.render("sorry", { user: req.user });
 });
 // ========================= Authentication start =================== //
 
@@ -221,7 +229,7 @@ app.post("/register/:type", async function (req, res) {
                                     port: 587,
                                     secure: false, // true for 465, false for other ports
                                     auth: {
-                                        user: "akshaysyal19@gmail.com",
+                                        user: "mailforproject333@gmail.com",
                                         pass: process.env.PASS,
                                     },
                                     tls: {
@@ -690,6 +698,142 @@ app.post("/admin/formQuiz/:domain", async function (req, res) {
     } else {
         res.redirect("/login/admin");
     }
+});
+
+app.get('/forgot', function(req, res) {
+  let passedMessage = req.query.message;
+  res.render('forgot', {
+    user: req.user,
+    passedMessage
+  });
+});
+
+app.post('/forgot', function(req, res, next) {
+  const username = req.body.username
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      User.findOne({ username: username }, function(err, user) {
+        if (!user) {
+          var message = encodeURIComponent("Oops! No account with that email address exists.");
+          return res.redirect('/forgot'+"?message="+message);
+        }
+
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function(err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function(token, user, done) {
+      var smtpTransport = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: "mailforproject333@gmail.com",
+                pass: process.env.PASS,
+            },
+            tls: {
+                rejectUnauthorized: false,
+            },
+      });
+      var mailOptions = {
+            from: "recruitment@gmail.com",
+            to: username,
+            subject:
+                "Recruitments 2021 - Password Reset",
+            html:
+                '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
+                "</b><br><br><h2>Your Password Reset link is: <b>"+
+                'http://' + req.headers.host + '/reset/' + token + '\n\n'+
+                "</b></h2><br>Please use this link to reset your password.</body>",
+        };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        let message = encodeURIComponent('An e-mail has been sent to ' + username + ' with further instructions.');
+        res.redirect("/forgot?message=" + message);
+      });
+    }
+  ], function(err) {
+    if (err) return next(err);
+    res.redirect('/forgot');
+  });
+});
+
+app.get('/reset/:token', function(req, res) {
+  let passedMessage = req.query.message;
+  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+    if (!user) {
+      return res.redirect('/sorry');
+    }
+    res.render('reset', {
+      user: req.user,
+      passedMessage
+    });
+  });
+});
+
+app.post('/reset/:token', function(req, res, next) {
+  async.waterfall([
+    function(done) {
+      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+        if (!user) {
+          var message = encodeURIComponent('Password reset token is invalid or has expired.');
+          return res.redirect('back');
+        }
+        user.setPassword(req.body.password, function(err,user){
+            if (err) return next(err)
+                console.log(err);
+                user.resetPasswordToken = undefined;
+                user.resetPasswordExpires = undefined;
+
+                user.save(function(err) {
+                    req.login(user, function(err) {
+                        done(err, user);
+                    })
+                });
+        });
+      });
+    },
+    function(user, done) {
+      var smtpTransport = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: "mailforproject333@gmail.com",
+                pass: process.env.PASS,
+            },
+            tls: {
+                rejectUnauthorized: false,
+            },
+      });
+      var mailOptions = {
+            from: "recruitment@gmail.com",
+            to: user.username,
+            subject:
+                "Recruitments 2021 - Password Changed",
+            html:
+                '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
+                "</b><br><br><h2>This is a confirmation that the password for your account has just been changed.<b>"
+        };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        let message = encodeURIComponent('Success! Your password has been changed.');
+        res.redirect("/?message=" + message);
+        done(err);
+      });
+    }
+  ], function(err) {
+    if (err) return next(err);
+    return res.redirect('/');
+  });
 });
 
 //listen
