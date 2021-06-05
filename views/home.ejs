@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--Google Font Roboto-->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;900&display=swap');
+    </style>
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+        integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/homeStyles.css" />
+
+    <title>Home</title>
+
+
+</head>
+
+<body>
+    <!-- Nav Bar -->
+    <div class="container-fluid Navbar-Section">
+        <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+            <a class="navbar-brand" href="#">
+                <img src="/images/logo-3.png" width="30" height="30" alt="">
+            </a>
+            <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item divider-vertical">
+                        <a class="nav-link h-tab" href="/">Home</a>
+                    </li>
+
+
+
+                    <li class="nav-item divider-vertical">
+                        <a class="nav-link" href="/recruitments">Recruitments</a>
+                    </li>
+                    <% if(user){ %>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a style="color: black!important;" class="dropdown-item" href="/logout">Logout</a>
+                            </div>
+                        </li>
+                        <% if(!user.verified){ %>
+                            <li class="nav-item divider-vertical">
+                                <a class="nav-link" style="color: red;" href="/verificationPage">Verify</a>
+                            </li>
+                            <% } %>
+                                <% }else{ %>
+                                    <li class="nav-item divider-vertical">
+                                        <a class="nav-link" href="/login/user">Login</a>
+                                    </li>
+                                    <li class="nav-item divider-vertical">
+                                        <a class="nav-link" href="/register/user">Register</a>
+                                    </li>
+                                    <% } %>
+
+
+
+
+                </ul>
+
+
+            </div>
+        </nav>
+    </div>
+
+    <!--Main Section-->
+    <div class="container-fluid Main-Section main-text background-img">
+        <% if(passed){ %>
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <strong>
+                    <%= passed %>
+                </strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <% } %>
+                <div>
+                    <img src="https://i.ibb.co/Gnt5thJ/home-img.jpg" class="rounded float-right home-img" alt=""
+                        srcset="">
+
+
+                </div>
+                <div class="heading">
+                    <h1>Welcome!</h1>
+                </div>
+
+                <div class="sub-heading">
+                    <h4>This is Staff Recruitment Portal.</br>Head to Recruitment Portal to give your Test.</br>
+                        All The Best!!</h4>
+                </div>
+                <div class="main-button">
+                    <a href="/recruitments">
+
+                        GO TO RECRUITMENT PORTAL &nbsp;&nbsp; <i class="fas fa-chevron-right"></i>
+
+                    </a>
+
+                </div>
+
+
+
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/222c4d2c03.js" crossorigin="anonymous"></script>
+</body>
+
+</html>

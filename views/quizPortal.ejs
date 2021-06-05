@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--Google Font Roboto-->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;900&display=swap');
+    </style>
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="/css/homeStyles.css" />
+
+    <title>Quiz Portal</title>
+    <style>
+        .nav-pills-custom .nav-link {
+            color: #aaa;
+            background: #fff;
+            position: relative;
+        }
+
+        button {
+            border-radius: 3px !important;
+            padding: 10px 20px !important;
+        }
+
+        .nav-pills-custom .nav-link.active {
+            color: #45b649;
+            background: #fff;
+        }
+
+
+        /* Add indicator arrow for the active tab */
+        @media (min-width: 992px) {
+            .nav-pills-custom .nav-link::before {
+                content: '';
+                display: block;
+                border-top: 8px solid transparent;
+                border-left: 10px solid #fff;
+                border-bottom: 8px solid transparent;
+                position: absolute;
+                top: 50%;
+                right: -10px;
+                transform: translateY(-50%);
+                opacity: 0;
+            }
+        }
+
+        .nav-pills-custom .nav-link.active::before {
+            opacity: 1;
+        }
+
+        .option {
+            cursor: pointer;
+        }
+
+        .option:focus {
+            color: black;
+        }
+
+        button {
+            margin: 5px;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .time {
+            display: inline;
+            font-size: 1.5rem;
+        }
+
+        .special {
+            background-color: #dc3545;
+            padding: 5px 20px;
+            border-radius: 30px;
+        }
+
+        .btn-primary {
+            width: 100% !important;
+
+        }
+
+        .btn-primary:focus {
+            background-color: teal;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!--Main Section-->
+
+    <!-- Demo header-->
+    <!-- Demo header-->
+    <section class="py-5 header">
+        <div class="container-fluid py-4">
+            <header class="text-center mb-5 pb-5 text-white">
+                <h1 class="display-4">Recruitment Exam <span style="text-transform: uppercase;"
+                        id="domain-info"><%= domain %> </span>Domain</h1>
+                <h6 class="time">Time Remaining: </h6>
+                <h6 class="time special" id="timeRemaining"></h6>
+                <h6 class="time">Minutes</h6>
+                <div class="time">
+                    <button id="finalSubmit" class="btn btn-info">Submit Quiz</button>
+                </div>
+            </header>
+            <input type="text" id="quiz_timing" style="display:none" value="<%= timings %>">
+            <input id="domain-input" type="text" style="display: none;" value="<%= domain %>">
+            <div class="row">
+                <div class="col-md-3 col-lg-2">
+                    <!-- Tabs nav -->
+                    <div class="nav flex-column nav-pills nav-pills-custom" id="v-pills-tab" role="tablist"
+                        aria-orientation="vertical">
+
+                        <% for(let i=0; i<quizQuestions[0].questions.length; i++){ %>
+                        <a class="nav-link mb-1 p-1 shadow <%= i==0&&"active"%> " data-toggle="pill"
+                            href="#<%= quizQuestions[0].questions[i].question.replace(/\s/g,'') %>" role="tab"
+                            aria-selected="true">
+
+                            <span class="font-weight-bold small text-uppercase">Question <%= i+1 %> </span></a>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="col-md-9 col-lg-10">
+                    <!-- Tabs content -->
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <% let j=0 %>
+                        <% quizQuestions[0].questions.forEach(function(q){ %>
+                        <div class="tab-pane fade shadow rounded bg-white show <%= j==0 && "active"  %>  p-5"
+                            id="<%= q.question.replace(/\s/g,'') %>" role="tabpanel">
+                            <pre style="font-weight: bold; font-size:20px"
+                                class="font-italic mb-4">Q. <%- q.question %> </pre>
+                            <p class="font-italic text-muted mb-2">
+                            <ul question="<%= q.question %> ">
+                                <div class="row">
+                                    <% if(q.type === "MCQ"){ %>
+                                    <% q.options.forEach(function(l){ %>
+                                    <li class="col-lg-6" style="text-align: center;"> <button
+                                            class="option btn btn-primary">
+                                            <pre style="color: white;"><%- l %></pre> </button></li>
+                                    <% }) %>
+                                    <button style="text-align: center;margin:auto"
+                                        class=" toSave btn btn-success">Submit</button>
+                                    <% }else{ %>
+                                    <textarea class="LAAnsers" name="" id="" cols="60" rows="5"></textarea>
+                                    <p style="color: rgba(0, 0, 0, 0.596);">*It will be automatically submitted.</p>
+                                    <% } %>
+                                </div>
+                            </ul>
+                            </p>
+                        </div>
+                        <% j++ %>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </section>
+
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/222c4d2c03.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        let domain = $("#domain-input").val();
+        let count = 0;
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === "hidden") {
+                count += 1
+                window.alert("Switching tabs is not permitted. The test will get submitted automatically. All your responses will be nullified. ")
+            }
+            if (count > 3) {
+                $.ajax({
+                    type: "POST",
+                    url: `/quizPortal/${domain}`,
+                    data: { answers: [{ question: "Malpractice", answer: "Malpractice" }] },
+                    success: function (data) {
+                        window.location.replace("/thanks");
+
+                    },
+
+                });
+                window.location.replace("/thanks");
+            }
+        });
+
+        $.post("/getUserData", function (data) {
+            domain = $("#domain-input").val();
+            if (data != "null") {
+                let user = JSON.parse(data);
+                let startDate;
+                user.startTime.forEach(function (e) {
+                    if (e.domain === domain) {
+                        startDate = new Date(e.startTime);
+                    }
+                });
+                let quiz_timing = Number($("#quiz_timing").val())
+                let difference = Date.now() - startDate;
+                let remainingTime = Math.round((difference / 1000) / 60);
+                let timeLeftToFinish = quiz_timing - remainingTime;
+                if (timeLeftToFinish <= quiz_timing && timeLeftToFinish > 0) {
+                    let answers = [];
+                    $(".option").click(function () {
+                        let selected = $(this).text()
+                        $(".toSave").unbind().click(function () {
+                            let answer = {
+                                question: $(this).parent().parent().attr("question"),
+                                answer: selected
+                            }
+                            answers.push(answer);
+
+                            $(this).css("display", "none")
+                            $(this).after(` <button class=" btn btn-success disabled mx-auto">Submitted</button>`);
+
+                        })
+                    });
+                    let domain = $("#domain-info").text()
+                    $("#finalSubmit").click(function () {
+
+                        $(".LAAnsers").each(function (i, data) {
+                            if ($(this).val()) {
+                                let answer = {
+                                    question: $(this).parent().parent().attr("question"),
+                                    answer: $(this).val()
+                                };
+
+                                answers.push(answer);
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",
+                            url: `/quizPortal/${domain}`,
+                            data: { answers },
+                            success: function (data) {
+                                window.location.replace("/thanks");
+
+                            },
+
+                        });
+                    })
+                    let count = 1
+                    $("#timeRemaining").text(timeLeftToFinish)
+                    var refreshIntervalId = setInterval(function (e) {
+                        let timeLeft = timeLeftToFinish - count;
+                        if (timeLeft < 0) {
+                            $(".LAAnsers").each(function (i, data) {
+                                if ($(this).val()) {
+                                    let answer = {
+                                        question: $(this).parent().attr("question"),
+                                        answer: $(this).val()
+                                    };
+
+                                    answers.push(answer);
+                                }
+                            });
+                            $.ajax({
+                                type: "POST",
+                                url: `/quizPortal/${domain}`,
+                                data: { answers },
+                                success: function (data) {
+                                    window.location.replace("/thanks");
+                                },
+
+                            });
+                            clearInterval(refreshIntervalId)
+                        }
+                        $("#timeRemaining").text(timeLeft);
+                        count++;
+                    }, 60000);
+                } else {
+                    window.location.replace("/thanks");
+                }
+
+
+            }
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('pre').on("cut copy paste", function (e) {
+                e.preventDefault();
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
