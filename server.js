@@ -180,85 +180,75 @@ app.post("/register/:type", async function (req, res) {
         contact_number,
         repassword,
     } = req.body;
-    if (
-        ((username.includes("2019") || username.includes("2020")) &&
-            username.includes("vitstudent.ac.in")) ||
-        username.endsWith("rohan.mittal2018@vitstudent.ac.in") ||
-        username.endsWith("manan.agrawal2018@vitstudent.ac.in")
-    ) {
-        if (password === repassword) {
-            User.register(
-                { username: username },
-                password,
-                function (err, user) {
-                    if (err) {
-                        console.log(err);
-                        var message = encodeURIComponent(
-                            "Email Already Exists"
-                        );
-                        res.redirect("/register/user?message=" + message);
-                    } else {
-                        passport.authenticate("local")(
-                            req,
-                            res,
-                            async function () {
-                                let otp = Math.floor(Math.random() * 10000);
-                                user.type = req.params.type;
-                                user.contact_number = contact_number;
-                                user.first_name = first_name;
-                                user.last_name = last_name;
-                                user.registration = registration;
-                                user.otpGenerated = otp;
-                                await user.save();
-                                //mailing starts here
 
-                                let mailOptions = {
-                                    from: "recruitment@gmail.com",
-                                    to: username,
-                                    subject:
-                                        "Recruitments 2021 - Registration Verification",
-                                    html:
-                                        '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
-                                        first_name +
-                                        "</b><br><br><h2>Your Email Verification code is <b>" +
-                                        otp +
-                                        "</b></h2><br>Please use this code to verify your account.</body>",
-                                };
-                                let transporter = nodemailer.createTransport({
-                                    host: "smtp.gmail.com",
-                                    port: 587,
-                                    secure: false, // true for 465, false for other ports
-                                    auth: {
-                                        user: "mailforproject333@gmail.com",
-                                        pass: process.env.PASS,
-                                    },
-                                    tls: {
-                                        rejectUnauthorized: false,
-                                    },
-                                });
-                                await transporter.sendMail(mailOptions);
-                                //mailing ends
-                                if (req.params.type === "admin")
-                                    res.redirect("/adminPanel");
-                                res.redirect("/verificationPage");
-                                delete req.session.returnTo;
-                            }
-                        );
-                    }
+    if (password === repassword) {
+        User.register(
+            { username: username },
+            password,
+            function (err, user) {
+                if (err) {
+                    console.log(err);
+                    var message = encodeURIComponent(
+                        "Email Already Exists"
+                    );
+                    res.redirect("/register/user?message=" + message);
+                } else {
+                    passport.authenticate("local")(
+                        req,
+                        res,
+                        async function () {
+                            let otp = Math.floor(Math.random() * 10000);
+                            user.type = req.params.type;
+                            user.contact_number = contact_number;
+                            user.first_name = first_name;
+                            user.last_name = last_name;
+                            user.registration = registration;
+                            user.otpGenerated = otp;
+                            await user.save();
+                            //mailing starts here
+
+                            let mailOptions = {
+                                from: "recruitment@gmail.com",
+                                to: username,
+                                subject:
+                                    "Recruitments 2021 - Registration Verification",
+                                html:
+                                    '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
+                                    first_name +
+                                    "</b><br><br><h2>Your Email Verification code is <b>" +
+                                    otp +
+                                    "</b></h2><br>Please use this code to verify your account.</body>",
+                            };
+                            let transporter = nodemailer.createTransport({
+                                host: "smtp.gmail.com",
+                                port: 587,
+                                secure: false, // true for 465, false for other ports
+                                auth: {
+                                    user: "mailforproject333@gmail.com",
+                                    pass: process.env.PASS,
+                                },
+                                tls: {
+                                    rejectUnauthorized: false,
+                                },
+                            });
+                            await transporter.sendMail(mailOptions);
+                            //mailing ends
+                            if (req.params.type === "admin")
+                                res.redirect("/adminPanel");
+                            res.redirect("/verificationPage");
+                            delete req.session.returnTo;
+                        }
+                    );
                 }
-            );
-        } else {
-            var message = encodeURIComponent("Passwords do not match!");
-            res.redirect(
-                "/register/" + req.params.type + "?message=" + message
-            );
-        }
-    } else {
-        var message = encodeURIComponent(
-            "Only vit mail address of first and second years is allowed!"
+            }
         );
-        res.redirect("/register/" + req.params.type + "?message=" + message);
+    } else {
+        var message = encodeURIComponent("Passwords do not match!");
+        res.redirect(
+            "/register/" + req.params.type + "?message=" + message
+        );
     }
+
 });
 
 // POST for the login of the user
@@ -700,141 +690,147 @@ app.post("/admin/formQuiz/:domain", async function (req, res) {
     }
 });
 
-app.get('/forgot', function(req, res) {
-  let passedMessage = req.query.message;
-  res.render('forgot', {
-    user: req.user,
-    passedMessage
-  });
-});
-
-app.post('/forgot', function(req, res, next) {
-  const username = req.body.username
-  async.waterfall([
-    function(done) {
-      crypto.randomBytes(20, function(err, buf) {
-        var token = buf.toString('hex');
-        done(err, token);
-      });
-    },
-    function(token, done) {
-      User.findOne({ username: username }, function(err, user) {
-        if (!user) {
-          var message = encodeURIComponent("Oops! No account with that email address exists.");
-          return res.redirect('/forgot'+"?message="+message);
-        }
-
-        user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-
-        user.save(function(err) {
-          done(err, token, user);
-        });
-      });
-    },
-    function(token, user, done) {
-      var smtpTransport = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: "mailforproject333@gmail.com",
-                pass: process.env.PASS,
-            },
-            tls: {
-                rejectUnauthorized: false,
-            },
-      });
-      var mailOptions = {
-            from: "recruitment@gmail.com",
-            to: username,
-            subject:
-                "Recruitments 2021 - Password Reset",
-            html:
-                '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
-                "</b><br><br><h2>Your Password Reset link is: <b>"+
-                'http://' + req.headers.host + '/reset/' + token + '\n\n'+
-                "</b></h2><br>Please use this link to reset your password.</body>",
-        };
-      smtpTransport.sendMail(mailOptions, function(err) {
-        let message = encodeURIComponent('An e-mail has been sent to ' + username + ' with further instructions.');
-        res.redirect("/forgot?message=" + message);
-      });
-    }
-  ], function(err) {
-    if (err) return next(err);
-    res.redirect('/forgot');
-  });
-});
-
-app.get('/reset/:token', function(req, res) {
-  let passedMessage = req.query.message;
-  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
-    if (!user) {
-      return res.redirect('/sorry');
-    }
-    res.render('reset', {
-      user: req.user,
-      passedMessage
+app.get('/forgot', function (req, res) {
+    let passedMessage = req.query.message;
+    res.render('forgot', {
+        user: req.user,
+        passedMessage
     });
-  });
 });
 
-app.post('/reset/:token', function(req, res, next) {
-  async.waterfall([
-    function(done) {
-      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
-        if (!user) {
-          var message = encodeURIComponent('Password reset token is invalid or has expired.');
-          return res.redirect('back');
-        }
-        user.setPassword(req.body.password, function(err,user){
-            if (err) return next(err)
-                console.log(err);
-                user.resetPasswordToken = undefined;
-                user.resetPasswordExpires = undefined;
+app.post('/forgot', function (req, res, next) {
+    const username = req.body.username
+    async.waterfall([
+        function (done) {
+            crypto.randomBytes(20, function (err, buf) {
+                var token = buf.toString('hex');
+                done(err, token);
+            });
+        },
+        function (token, done) {
+            User.findOne({ username: username }, function (err, user) {
+                if (!user) {
+                    var message = encodeURIComponent("Oops! No account with that email address exists.");
+                    return res.redirect('/forgot' + "?message=" + message);
+                }
 
-                user.save(function(err) {
-                    req.login(user, function(err) {
-                        done(err, user);
-                    })
+                user.resetPasswordToken = token;
+                user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+                user.save(function (err) {
+                    done(err, token, user);
                 });
-        });
-      });
-    },
-    function(user, done) {
-      var smtpTransport = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: "mailforproject333@gmail.com",
-                pass: process.env.PASS,
-            },
-            tls: {
-                rejectUnauthorized: false,
-            },
-      });
-      var mailOptions = {
-            from: "recruitment@gmail.com",
-            to: user.username,
-            subject:
-                "Recruitments 2021 - Password Changed",
-            html:
-                '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
-                "</b><br><br><h2>This is a confirmation that the password for your account has just been changed.<b>"
-        };
-      smtpTransport.sendMail(mailOptions, function(err) {
-        let message = encodeURIComponent('Success! Your password has been changed.');
-        res.redirect("/?message=" + message);
-        done(err);
-      });
-    }
-  ], function(err) {
-    if (err) return next(err);
-    return res.redirect('/');
-  });
+            });
+        },
+        function (token, user, done) {
+            var smtpTransport = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 587,
+                secure: false, // true for 465, false for other ports
+                auth: {
+                    user: "mailforproject333@gmail.com",
+                    pass: process.env.PASS,
+                },
+                tls: {
+                    rejectUnauthorized: false,
+                },
+            });
+            var mailOptions = {
+                from: "recruitment@gmail.com",
+                to: username,
+                subject:
+                    "Recruitments 2021 - Password Reset",
+                html:
+                    '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
+                    "</b><br><br><h2>Your Password Reset link is: <b>" +
+                    'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                    "</b></h2><br>Please use this link to reset your password.</body>",
+            };
+            smtpTransport.sendMail(mailOptions, function (err) {
+                let message = encodeURIComponent('An e-mail has been sent to ' + username + ' with further instructions.');
+                res.redirect("/forgot?message=" + message);
+            });
+        }
+    ], function (err) {
+        if (err) return next(err);
+        res.redirect('/forgot');
+    });
 });
+
+app.get('/reset/:token', function (req, res) {
+    let passedMessage = req.query.message;
+    User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) {
+        if (!user) {
+            return res.redirect('/sorry');
+        }
+        res.render('reset', {
+            user: req.user,
+            passedMessage
+        });
+    });
+});
+
+app.post('/reset/:token', function (req, res, next) {
+    async.waterfall([
+        function (done) {
+            User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) {
+                if (!user) {
+                    var message = encodeURIComponent('Password reset token is invalid or has expired.');
+                    return res.redirect('back');
+                }
+                user.setPassword(req.body.password, function (err, user) {
+                    if (err) return next(err)
+                    console.log(err);
+                    user.resetPasswordToken = undefined;
+                    user.resetPasswordExpires = undefined;
+
+                    user.save(function (err) {
+                        req.login(user, function (err) {
+                            done(err, user);
+                        })
+                    });
+                });
+            });
+        },
+        function (user, done) {
+            var smtpTransport = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 587,
+                secure: false, // true for 465, false for other ports
+                auth: {
+                    user: "mailforproject333@gmail.com",
+                    pass: process.env.PASS,
+                },
+                tls: {
+                    rejectUnauthorized: false,
+                },
+            });
+            var mailOptions = {
+                from: "recruitment@gmail.com",
+                to: user.username,
+                subject:
+                    "Recruitments 2021 - Password Changed",
+                html:
+                    '<body style="padding: 20px; background-color: rgb(25,35,75); color: white;font-family: Roboto; text-align: center">Welcome to Recruitments 2021, <b>' +
+                    "</b><br><br><h2>This is a confirmation that the password for your account has just been changed.<b>"
+            };
+            smtpTransport.sendMail(mailOptions, function (err) {
+                let message = encodeURIComponent('Success! Your password has been changed.');
+                res.redirect("/?message=" + message);
+                done(err);
+            });
+        }
+    ], function (err) {
+        if (err) return next(err);
+        return res.redirect('/');
+    });
+});
+
+// Result route
+
+app.get('/results', (req, res) => {
+
+})
 
 //listen
 app.listen(process.env.PORT || PORT, function () {
