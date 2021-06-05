@@ -67,10 +67,6 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
     },
-    marks: {
-        type: Number,
-        default: 0,
-    },
     registration: { type: String },
     contact_number: {
         type: Number,
@@ -483,8 +479,8 @@ app.post("/quizPortal/:domain", async function (req, res) {
                                         f.answer.replace(/\s/g, "") ===
                                         e.answer.replace(/\s/g, "")
                                     ) {
-                                        // correctAnswers.push(f);
-                                        marks += 1
+                                        correctAnswers.push(f);
+
                                     }
                                 } else if (e.type === "LA") {
                                     correctAnswers.push(f);
