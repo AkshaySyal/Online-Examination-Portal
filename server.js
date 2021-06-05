@@ -67,6 +67,10 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
     },
+    marks: {
+        type: Number,
+        default: 0,
+    },
     registration: { type: String },
     contact_number: {
         type: Number,
@@ -479,7 +483,8 @@ app.post("/quizPortal/:domain", async function (req, res) {
                                         f.answer.replace(/\s/g, "") ===
                                         e.answer.replace(/\s/g, "")
                                     ) {
-                                        correctAnswers.push(f);
+                                        // correctAnswers.push(f);
+                                        marks += 1
                                     }
                                 } else if (e.type === "LA") {
                                     correctAnswers.push(f);
@@ -828,7 +833,25 @@ app.post('/reset/:token', function (req, res, next) {
 
 // Result route
 
-app.get('/results', (req, res) => {
+app.get('/results/:domain', (req, res) => {
+    const domain = req.params.domain
+
+    User.find({}, (err, users) => {
+        console.log("FINAL CHECK")
+        for (var i = 0; i < users.length; i++) {
+            for (var j = 0; j < users[i].correctAnswers.length; j++) {
+                if (users[i].correctAnswers[j].domain === domain) {
+                    console.log(users[i].username)
+                    console.log(users[i].correctAnswers[j].correctAnswers)
+                    //ans = users[i].correctAnswers[j].correctAnswers.map(obj => ({ ...obj }))
+                    break
+                }
+            }
+        }
+    })
+
+
+
 
 })
 
