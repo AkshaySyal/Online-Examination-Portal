@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        body {
+            padding: 1% 5% 0%;
+        }
+    </style>
+
+
+    <title>Results of <%=domain%>
+    </title>
+</head>
+
+<body>
+    <div id="accordion">
+
+        <% for(var i=0;i<data.length;i++) { %>
+            <div class="card">
+                <div class="card-header" id=<%="heading" +i%> >
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target=<%="#collapse" +i%>
+                            aria-expanded="true" aria-controls= <%="collapse"+ i%> >
+                                <%=data[i].name%>
+                        </button>
+                    </h5>
+                </div>
+
+                <div id=<%="collapse" +i%> class="collapse show" aria-labelledby=<%="heading"+ i%>
+                        data-parent="#accordion">
+                        <div class="card-body">
+
+                            <h3>
+                                MCQ Answered Correctly: <%=data[i].mcq%>
+                            </h3>
+
+                            <% for(var j=0;j<data[i].LA.length;j++) { %>
+                                <h3>
+                                    <strong>Q<%=j+1%>)</strong>
+                                    <%= data[i].LA[j].question %> </br>
+                                        <strong>Ans:</strong>
+                                        <%= data[i].LA[j].answer %>
+                                </h3>
+
+                                <% } %>
+
+                        </div>
+                </div>
+            </div>
+            <form class="form-inline" method="POST" autocomplete="off">
+                <label for="Q1" class="mr-sm-2">Marks for Q1:</label>
+                <input required type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter Marks" name="q1">
+                <label for="Q2" class="mr-sm-2">Marks for Q2:</label>
+                <input required type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter Marks" name="q2">
+                <input type="hidden" name="mcq" value=<%=data[i].mcq%> >
+                <input type="hidden" name="email" value=<%=data[i].name%>>
+                <button type="submit" class="btn btn-primary mb-2">Mail result</button>
+            </form>
+
+            <% } %>
+
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -831,23 +831,108 @@ app.post('/reset/:token', function (req, res, next) {
 
 app.get('/results/:domain', (req, res) => {
     const domain = req.params.domain
+    var data = []
 
     User.find({}, (err, users) => {
-        console.log("FINAL CHECK")
+
         for (var i = 0; i < users.length; i++) {
+
+            const dataItem = { name: "", LA: [], mcq: 0 }
+
             for (var j = 0; j < users[i].correctAnswers.length; j++) {
+
                 if (users[i].correctAnswers[j].domain === domain) {
-                    console.log(users[i].username)
-                    console.log(users[i].correctAnswers[j].correctAnswers)
-                    //ans = users[i].correctAnswers[j].correctAnswers.map(obj => ({ ...obj }))
+
+                    // console.log(users[i].username)
+                    dataItem.name = users[i].username
+
+                    //console.log(users[i].correctAnswers[j].correctAnswers)
+                    const ans = users[i].correctAnswers[j].correctAnswers.map(obj => ({ ...obj }))
+                    //console.log(ans)
+
+
+                    for (var k = 0; k < ans.length; k++) {
+                        if (/^\s/.test(ans[k].answer)) {
+                            dataItem.mcq += 1;
+                        }
+                        else {
+                            dataItem.LA.push(ans[k])
+                        }
+                    }
+                    data.push(dataItem)
                     break
                 }
             }
         }
+        res.render('results', {
+            data: data,
+            domain: domain
+        })
     })
+})
+
+
+app.post('/results/:domain', async (req, res) => {
+    const domain = req.params.domain
+
+    const q1 = parseInt(req.body.q1)
+    const q2 = parseInt(req.body.q2)
+    const mcq = parseInt(req.body.mcq)
+    const total = q1 + q2 + mcq
+    const username = req.body.email
+    console.log(username)
+
+    //mailing strts here
+
+    let mailOptions = {
+        from: "recruitment@gmail.com",
+        to: username,
+        subject:
+            "Result",
+        html:
+            '<body style="padding: 20px; background-color: rgb(25,35,70); color: white;font-family: Roboto; text-align: center">Thank You for giving test<b>' +
+            "</b><br><br><h2>Your Total Marks are <b>" +
+            total + "</body>",
+    };
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: "mailforproject333@gmail.com",
+            pass: process.env.PASS,
+        },
+        tls: {
+            rejectUnauthorized: false,
+        },
+    });
+    await transporter.sendMail(mailOptions);
+
+    //ends here
 
 
 
+
+
+
+
+
+    res.redirect('/results/' + domain)
+})
+
+//Staff login route
+
+app.get('/stafflogin', (req, res) => {
+    res.render('stafflogin')
+})
+
+app.post('/stafflogin', (req, res) => {
+    const user = req.body.username
+    const pass = req.body.password
+
+    if (user.includes("rm") && pass === "1234") {
+        res.redirect('/admin')
+    }
 
 })
 

@@ -46,6 +46,7 @@
             <!--Add Question Buttons-->
             <input type="button" value="Add MCQ" class="MCQ">
             <input type="button" value="Add Long Answer" class="LA">
+            <input type="button" value="View Result" class="RES">
             <!--MCQ Question-->
             <div class="first-mcq-question-wrap">
 
@@ -78,6 +79,13 @@
 
             var mcq = '<div class="mcq-parent"><div class="form-row domain-name"><div class="form-group col-md-6"><textarea type="text"class="form-control"name="mcqQues_name"placeholder="Enter MCQ Question"></textarea></div></div><div class="form-row domain-name"><div class="form-group col-md-2"><textarea type="text"class="form-control"name="mcq_opt_a"placeholder="Option A"></textarea> </div><div class="form-group col-md-2"><textarea type="text"class="form-control"name="mcq_opt_b"placeholder="Option B"></textarea></div><div class="form-group col-md-2"><textarea type="text"class="form-control"name="mcq_opt_c"placeholder="Option C"></textarea></div><div class="form-group col-md-2"><textarea type="text"class="form-control"name="mcq_opt_d"placeholder="Option D"></textarea></div><div class="form-group col-md-2"><textarea type="text"class="form-control"name="mcq_ans"placeholder="Answer"></textarea></div><div class="form-group col-md-2"><a href="#"class="remove_field">Remove</a></div><input type="hidden"name="question_type"value="MCQ"></div></div>'
             var longAns = '<div class="form-row domain-name"><div class="form-group col-md-6"><textarea type="text"class="form-control"name="laQues_name"placeholder="Enter Long Answer Question"> </textarea> </div><input type="hidden"name="question_type"value="LA"><div class="form-group col-md-6"><a href="#"class="remove_field">Remove</a></div></div>'
+
+            $(".RES").on("click", () => {
+                var domain = $("select.form-control").children("option:selected").val()
+                window.location.href = "/results/" + domain;
+
+            })
+
             $(".MCQ").on("click", () => {
                 $(".first-mcq-question-wrap").append(mcq)
             });
